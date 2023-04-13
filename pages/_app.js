@@ -1,6 +1,7 @@
 import '../styles/reset.css';
 import '../styles/main.css';
 import { useEffect, useState } from 'react';
+import { isIOS } from 'react-device-detect';
 
 let deferredPrompt;
 
@@ -57,6 +58,18 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
+  // Handle iOS install prompt
+  if (typeof window !== 'undefined') {
+    // function isIos() {
+    //   const userAgent = window.navigator.userAgent.toLowerCase();
+    //   return /iphone|ipad|ipod/.test(userAgent);
+    // }
+
+    function isInStandaloneMode() {
+      return 'standalone' in window.navigator && window.navigator.standalone;
+    }
+  }
+
   return (
     <>
       <Component {...pageProps} />
@@ -64,6 +77,11 @@ function MyApp({ Component, pageProps }) {
       {installable && (
         <button className="install-button" onClick={handleInstallClick}>
           INSTALL ME
+        </button>
+      )}
+      {isIOS && (
+        <button className="ios-install-button" onClick={handleInstallClick}>
+          iOS INSTALL ME
         </button>
       )}
     </>
