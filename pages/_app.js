@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   const [installable, setInstallable] = useState(false);
+  const [displayMode, setDisplayMode] = useState('browser tab');
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -41,7 +42,17 @@ function MyApp({ Component, pageProps }) {
       // Log install to analytics
       console.log('INSTALL: Success');
     });
-  }, []);
+
+    // determine whether user is viewing in standalone mode (i.e. PWA)
+    window.addEventListener('DOMContentLoaded', () => {
+      if (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator.standalone && window.navigator.standalone === true)
+      ) {
+        setDisplayMode('standalone');
+      }
+    });
+  }, [displayMode]);
 
   const handleInstallClick = (e) => {
     // Hide the app provided install promotion
@@ -58,28 +69,16 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
-  // Handle iOS install prompt
-  if (typeof window !== 'undefined') {
-    // function isIos() {
-    //   const userAgent = window.navigator.userAgent.toLowerCase();
-    //   return /iphone|ipad|ipod/.test(userAgent);
-    // }
-
-    function isInStandaloneMode() {
-      return 'standalone' in window.navigator && window.navigator.standalone;
-    }
-  }
-
   return (
     <>
       <Component {...pageProps} />
       <h2>Install Demo</h2>
-      {installable && (
+      {installable && displayMode !== 'standalone' && (
         <button className="install-button" onClick={handleInstallClick}>
           INSTALL ME
         </button>
       )}
-      {isIOS && (
+      {isIOS && displayMode !== 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
           iOS INSTALL ME
         </button>
