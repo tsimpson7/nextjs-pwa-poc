@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { isIOS } from 'react-device-detect';
 
 let deferredPrompt;
+let iOSIsInstalled;
 
 // This default export is required in a new `pages/_app.js` file.
 function MyApp({ Component, pageProps }) {
@@ -60,8 +61,8 @@ function MyApp({ Component, pageProps }) {
       }
     });
 
-    const iOSCanInstall = 'standalone' in window.navigator;
-    const iOSIsInstalled = window.navigator.standalone === true;
+    iOSIsInstalled = window.navigator.standalone === true;
+    console.log('iOSIsInstalled', iOSIsInstalled);
   }, []);
 
   const handleInstallClick = (e) => {
