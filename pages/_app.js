@@ -59,6 +59,9 @@ function MyApp({ Component, pageProps }) {
         setDisplayMode('standalone');
       }
     });
+
+    const iOSCanInstall = 'standalone' in window.navigator;
+    const iOSIsInstalled = window.navigator.standalone === true;
   }, []);
 
   const handleInstallClick = (e) => {
@@ -75,8 +78,6 @@ function MyApp({ Component, pageProps }) {
       }
     });
   };
-  const iOSCanInstall = 'standalone' in window.navigator;
-  const iOSIsInstalled = window.navigator.standalone === true;
 
   //console.log('Display mode: ' + displayMode);
 
