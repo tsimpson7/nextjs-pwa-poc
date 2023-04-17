@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps }) {
 
   const [installable, setInstallable] = useState(false);
   const [displayMode, setDisplayMode] = useState('');
+  //const []
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -51,15 +52,22 @@ function MyApp({ Component, pageProps }) {
 
     //q: how can I check for standalone mode on Android? matchMedia('(display-mode: standalone)') is not working
     //a:
-    window.addEventListener('DOMContentLoaded', () => {
-      setDisplayMode('browser');
-      if (
-        window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator && window.navigator.standalone === true)
-      ) {
-        setDisplayMode('standalone');
-      }
-    });
+    // window.addEventListener('DOMContentLoaded', () => {
+    //   setDisplayMode('browser');
+    //   if (
+    //     window.matchMedia('(display-mode: standalone)').matches ||
+    //     (window.navigator && window.navigator.standalone === true)
+    //   ) {
+    //     setDisplayMode('standalone');
+    //   }
+    // });
+
+    if (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator && window.navigator.standalone === true)
+    ) {
+      setDisplayMode('standalone');
+    }
 
     iOSIsInstalled = window.navigator.standalone === true;
     console.log('iOSIsInstalled', iOSIsInstalled);
@@ -85,6 +93,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Component {...pageProps} />
+      <h2>v1.0</h2>
+      <h2>Display mode: {displayMode}</h2>
       <h2>Install Demo</h2>
       {installable && displayMode !== 'standalone' && (
         <button className="install-button" onClick={handleInstallClick}>
@@ -101,11 +111,11 @@ function MyApp({ Component, pageProps }) {
           iOS INSTALL ME - standalone mode useEffect
         </button>
       )}
-      {isIOS && iOSIsInstalled && (
+      {/* {isIOS && iOSIsInstalled && (
         <button className="ios-install-button" onClick={handleInstallClick}>
           iOS INSTALL ME - standalone mode new
         </button>
-      )}
+      )} */}
     </>
   );
 }
