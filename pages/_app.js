@@ -75,6 +75,8 @@ function MyApp({ Component, pageProps }) {
       }
     });
   };
+  const iOSCanInstall = 'standalone' in window.navigator;
+  const iOSIsInstalled = window.navigator.standalone === true;
 
   //console.log('Display mode: ' + displayMode);
 
@@ -94,7 +96,12 @@ function MyApp({ Component, pageProps }) {
       )}
       {isIOS && displayMode == 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS INSTALL ME - standalone mode
+          iOS INSTALL ME - standalone mode useEffect
+        </button>
+      )}
+      {isIOS && iOSIsInstalled && (
+        <button className="ios-install-button" onClick={handleInstallClick}>
+          iOS INSTALL ME - standalone mode new
         </button>
       )}
     </>
