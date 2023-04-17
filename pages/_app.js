@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   const [installable, setInstallable] = useState(false);
-  const [displayMode, setDisplayMode] = useState('browser tab');
+  const [displayMode, setDisplayMode] = useState('');
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -44,15 +44,22 @@ function MyApp({ Component, pageProps }) {
     });
 
     // determine whether user is viewing in standalone mode (i.e. PWA)
+
+    //q: how can I check for standalone mode on iOS? window.naviagtion.standalone is not working
+    //a: https://stackoverflow.com/questions/58019466/how-to-detect-if-a-pwa-is-installed-on-ios
+
+    //q: how can I check for standalone mode on Android? matchMedia('(display-mode: standalone)') is not working
+    //a:
     window.addEventListener('DOMContentLoaded', () => {
+      setDisplayMode('browser');
       if (
         window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator.standalone && window.navigator.standalone === true)
+        (window.navigator && window.navigator.standalone === true)
       ) {
         setDisplayMode('standalone');
       }
     });
-  }, [displayMode]);
+  }, []);
 
   const handleInstallClick = (e) => {
     // Hide the app provided install promotion
@@ -69,6 +76,8 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
+  //console.log('Display mode: ' + displayMode);
+
   return (
     <>
       <Component {...pageProps} />
@@ -80,7 +89,12 @@ function MyApp({ Component, pageProps }) {
       )}
       {isIOS && displayMode !== 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS INSTALL ME
+          iOS INSTALL ME - not standalone
+        </button>
+      )}
+      {isIOS && displayMode == 'standalone' && (
+        <button className="ios-install-button" onClick={handleInstallClick}>
+          iOS INSTALL ME - standalone mode
         </button>
       )}
     </>
