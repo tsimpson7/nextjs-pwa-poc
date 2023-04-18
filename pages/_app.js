@@ -1,10 +1,9 @@
 import '../styles/reset.css';
 import '../styles/main.css';
 import { useEffect, useState } from 'react';
-import { isIOS } from 'react-device-detect';
+import { isIOS, isMobile } from 'react-device-detect';
 
 let deferredPrompt;
-let iOSIsInstalled;
 
 // This default export is required in a new `pages/_app.js` file.
 function MyApp({ Component, pageProps }) {
@@ -68,9 +67,6 @@ function MyApp({ Component, pageProps }) {
     ) {
       setDisplayMode('standalone');
     }
-
-    iOSIsInstalled = window.navigator.standalone === true;
-    console.log('iOSIsInstalled', iOSIsInstalled);
   }, []);
 
   const handleInstallClick = (e) => {
@@ -88,34 +84,33 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
-  //console.log('Display mode: ' + displayMode);
-
   return (
     <>
       <Component {...pageProps} />
       <h2>v1.0</h2>
       <h2>Display mode: {displayMode}</h2>
       <h2>Install Demo</h2>
-      {installable && displayMode !== 'standalone' && (
+      {/* Non-iOS has built-in installation readiness ie if it hasn't already been installed it is INSTALLABLE therefore show a custom install prompt.
+          If it has been installed, it is no longer INSTALLABLE therefore it wont prompt for installation */}
+      {isMobile && installable && displayMode !== 'standalone' && (
         <button className="install-button" onClick={handleInstallClick}>
           INSTALL ME
         </button>
       )}
-      {isIOS && displayMode !== 'standalone' && (
+      {/* CAN DETECT IF IT IS RUNNING on iOS but not as a PWA 
+          therefore we can render a custom iOS add to homescreen prompt  */}
+      {isMobile && isIOS && displayMode !== 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS INSTALL ME - not standalone
+          iOS - INSTALL ME - not being viewed as a PWA
         </button>
       )}
-      {isIOS && displayMode == 'standalone' && (
+      {/* CAN DETECT IF IT IS RUNNING AS A PWA ON iOS 
+          therefore don't need to show any install prompt  */}
+      {isMobile && isIOS && displayMode == 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS INSTALL ME - standalone mode useEffect
+          iOS - dont install me - not being viewed as a PWA
         </button>
       )}
-      {/* {isIOS && iOSIsInstalled && (
-        <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS INSTALL ME - standalone mode new
-        </button>
-      )} */}
     </>
   );
 }
