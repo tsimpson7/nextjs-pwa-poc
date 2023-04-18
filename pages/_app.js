@@ -108,7 +108,7 @@ function MyApp({ Component, pageProps }) {
           therefore don't need to show any install prompt  */}
       {isMobile && isIOS && displayMode == 'standalone' && (
         <button className="ios-install-button" onClick={handleInstallClick}>
-          iOS - dont install me - not being viewed as a PWA
+          iOS - dont install me - already viewing as a PWA
         </button>
       )}
     </>
