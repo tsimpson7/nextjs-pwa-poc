@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }) {
 
     if (
       window.matchMedia('(display-mode: standalone)').matches ||
-      'standalone' in window.navigator
+      (window.navigator && window.navigator.standalone === true)
     ) {
       setDisplayMode('standalone');
     }
