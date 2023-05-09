@@ -44,26 +44,9 @@ function MyApp({ Component, pageProps }) {
       console.log('INSTALL: Success');
     });
 
-    // determine whether user is viewing in standalone mode (i.e. PWA)
-
-    //q: how can I check for standalone mode on iOS? window.naviagtion.standalone is not working
-    //a: https://stackoverflow.com/questions/58019466/how-to-detect-if-a-pwa-is-installed-on-ios
-
-    //q: how can I check for standalone mode on Android? matchMedia('(display-mode: standalone)') is not working
-    //a:
-    // window.addEventListener('DOMContentLoaded', () => {
-    //   setDisplayMode('browser');
-    //   if (
-    //     window.matchMedia('(display-mode: standalone)').matches ||
-    //     (window.navigator && window.navigator.standalone === true)
-    //   ) {
-    //     setDisplayMode('standalone');
-    //   }
-    // });
-
     if (
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator && window.navigator.standalone === true)
+      'standalone' in window.navigator
     ) {
       setDisplayMode('standalone');
     }
