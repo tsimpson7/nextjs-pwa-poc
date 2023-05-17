@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
 
 let deferredPrompt;
+console.log('deferred prompt straight after declaration: ', deferredPrompt);
 
 // This default export is required in a new `pages/_app.js` file.
 function MyApp({ Component, pageProps }) {
@@ -35,6 +36,11 @@ function MyApp({ Component, pageProps }) {
       e.preventDefault();
       // Stash the event so it can be triggered later.
       deferredPrompt = e;
+      console.log(
+        'deferred prompt after assigned to e.preventDefault: ',
+        deferredPrompt
+      );
+
       // Update UI notify the user they can install the PWA
       setInstallable(true);
     });
@@ -52,9 +58,13 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  const handleInstallClick = (e) => {
+  const handleInstallClick = () => {
     // Hide the app provided install promotion
     setInstallable(false);
+    console.log(
+      'deferred prompt inside click handler before prompt: ',
+      deferredPrompt
+    );
     // Show the install prompt
     deferredPrompt.prompt();
     // Wait for the user to respond to the prompt
@@ -65,7 +75,13 @@ function MyApp({ Component, pageProps }) {
         console.log('User dismissed the install prompt');
       }
     });
+    console.log(
+      'deferred prompt inside click handler after prompt and user choice: ',
+      deferredPrompt
+    );
   };
+
+  console.log('deferred prompt end - outisde click handler: ', deferredPrompt);
 
   return (
     <>
